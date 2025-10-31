@@ -13,8 +13,8 @@ pipeline {
     stages {
         stage('Install') {
             steps {
-                dir('microservice-ui') {
-                    withEnv(["PATH=${tool env.NODEJS_TOOL}/bin:${env.PATH}"]) {
+                withEnv(["PATH=${tool env.NODEJS_TOOL}/bin:${env.PATH}"]) {
+                    dir('microservice-ui') {
                         sh 'npm ci'
                     }
                 }
