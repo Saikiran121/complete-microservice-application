@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    options {
+        timestamps()
+        ansiColor('xterm')
+        timeout(time: 30, unit: 'MINUTES')
+
+    }
+
+    environment {
+        DOCKER_CREDENTIALS = 'dockerhub'
+        NODEJS_TOOL = 'node-12'
+        JDK_TOOL = 'jdk-21'
+        MAVEN_TOOL = 'maven-3.9'
+        COMMIT_SHA = "${env.GIT_COMMIT ?: 'local'}"
+        IMAGE_NAME = "saikiran8050/${params.SERVICE_DIR}"
+        IMAGE_TAGS = "${COMMIT_SHA},${BRANCH_NAME_SAFE}${params.SEMVER ? ",v${params.SEMVER}" : ""}"
+    }
+
+    stage('Install and Lint') {
+        parallel {
+            stage('npm ci') {
+                steps {
+                    dir("${params.SERVICE_DIR}") { 
+                        withEnv(["PATH=${tool env.NODEJS_TOOL}/bin:${env.PATH}", "NG_CLI_ANALYTICS=ci"]) { 
+                            sh 'npm ci'
+                        }
+                    }
+                }
+            }
+
+            stage('Lint') {
+                steps {
+                    dir("${params.SERVICE_DIR}") {
+                        withEnv(["PATH=${tool env.NODEJS_TOOL}/bin:${env.PATH}"]) {
+                            sh 'npm run lint:ci || true'
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
