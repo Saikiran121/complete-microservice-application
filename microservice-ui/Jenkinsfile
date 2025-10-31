@@ -22,8 +22,12 @@ pipeline {
         stage('Build Prod') {
             steps {
                 dir('microservice-ui') {
-                    sh 'npx ng --configuration=production --aot --build-optimizer'
-                    sh 'echo "--- dist contents ---" && ls -la dist || true'
+                    sh '''
+                        npx ng build microservice-ui --prod --aot --build-optimizer
+                        echo "--- dist tree ---"
+                        ls -la dist || true
+                        find dist -maxdepth 2 -name index.html -print || true
+                    '''
                 }
             }
         }
