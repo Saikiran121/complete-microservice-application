@@ -1,22 +1,19 @@
 pipeline {
-    agent any 
+    agent {
+        docker {
+            image: 'node:12-bullseye'
+        }
+    }
 
     options {
         timestamps()
     }
 
-    environment {
-        NODEJS_TOOL = 'node-12'
-        NG_CLI_ANALYTICS = 'ci'
-    }
-
     stages {
         stage('Install') {
             steps {
-                withEnv(["PATH=${tool env.NODEJS_TOOL}/bin:${env.PATH}"]) {
-                    dir('microservice-ui') {
-                        sh 'npm ci'
-                    }
+                dir('microservice-ui') {
+                    sh 'npm ci'
                 }
             }
         }
