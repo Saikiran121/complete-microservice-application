@@ -13,8 +13,10 @@ pipeline {
     stages {
         stage('Install') {
             steps {
-                withEnv(["PATH=${tool env.NODEJS_TOOL}/bin:${env.PATH}"]) {
-                    sh 'npm ci'
+                dir {
+                    withEnv(["PATH=${tool env.NODEJS_TOOL}/bin:${env.PATH}"]) {
+                        sh 'npm ci'
+                    }
                 }
             }
         }
