@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        NODEJS_TOOL = 'node_18'
+        NODEJS_TOOL = 'node-12'
         NG_CLI_ANALYTICS = 'ci'
     }
 
