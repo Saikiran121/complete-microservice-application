@@ -27,5 +27,17 @@ pipeline {
                 }
             }
         }
+
+        stage('Debug Angular Env') {
+            steps {
+                dir('microservice-ui') {
+                    sh '''
+                        npx ng version || true
+                        echo "--- projects in angular.json ---"
+                        cat angular.json | sed -n '1,120p' | sed -n '/"projects"/,/"cli"/p' || true
+                    '''
+                }
+            }
+        }
     }
 }
