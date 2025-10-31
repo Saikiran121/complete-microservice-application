@@ -51,5 +51,16 @@ pipeline {
                 }
             }
         }
+
+        stage('Docker build') {
+            agent any 
+            steps {
+                dir('microservice-ui') {
+                    sh '''
+                        docker build -t saikiran8050/microservice-ui:0.10.31 .
+                    '''
+                }
+            }
+        }
     }
 }
