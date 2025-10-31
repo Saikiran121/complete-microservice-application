@@ -43,5 +43,13 @@ pipeline {
                 }
             }
         }
+
+        stage('Archive Build') {
+            steps {
+                dir('microservice-ui') {
+                    archiveArtifacts artifacts: 'dist/**', fingerprint: true
+                }
+            }
+        }
     }
 }
