@@ -18,5 +18,14 @@ pipeline {
                 }
             }
         }
+
+        stage('Build Prod') {
+            steps {
+                dir('microservice-ui') {
+                    sh 'npx ng --configuration=production --aot --build-optimizer'
+                    sh 'echo "--- dist contents ---" && ls -la dist || true'
+                }
+            }
+        }
     }
 }
