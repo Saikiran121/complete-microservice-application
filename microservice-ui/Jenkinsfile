@@ -52,11 +52,19 @@ pipeline {
             }
         }
 
+        stage('Fix workspace perms') {
+            agent any 
+            steps {
+                sh 'docker run --rm -v "$WORKSPACE":/w alpine sh -c "chown -R 111:113 /w"'
+            }
+        }
+
         stage('Docker build') {
             agent any 
             steps {
                 dir('microservice-ui') {
                     sh '''
+                        docker version
                         docker build -t saikiran8050/microservice-ui:0.10.31 .
                     '''
                 }
